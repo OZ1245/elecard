@@ -1,0 +1,32 @@
+{
+  "name": "elecard",
+  "version": "1.0.0",
+  "description": "Elecart test task",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OZ1245/elecard.git"
+  },
+  "author": "Boldyreva Nadezhda | boldyrevanadezhda@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OZ1245/elecard/issues"
+  },
+  "homepage": "https://github.com/OZ1245/elecard#readme",
+  "dependencies": {
+    "gulp": "^4.0.2",
+    "gulp-clean": "^0.4.0",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-connect": "^5.7.0",
+    "gulp-jsvalidate": "^5.0.0",
+    "gulp-less": "^4.0.1",
+    "gulp-minify": "^3.1.0",
+    "gulp-rename": "^2.0.0",
+    "less-plugin-autoprefix": "^2.0.0",
+    "path": "^0.12.7"
+  }
+}

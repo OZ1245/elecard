@@ -1,0 +1,27 @@
+body {
+  background: @color-gray;
+  margin: 0;
+}
+
+header, footer {
+  background: @color-violet;
+  position: fixed;
+}
+
+header {
+  width: 100%;
+  height: @header-height;
+  top: 0;
+  left: 0;
+}
+
+footer {
+  width: 100%;
+  height: @footer-height;
+  bottom: 0;
+  left: 0;
+}
+
+.viewport {
+  margin: @header-height 0 @footer-height;
+}
