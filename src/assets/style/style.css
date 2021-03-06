@@ -20,5 +20,7 @@ footer {
   left: 0;
 }
 .viewport {
-  margin: 100px 0 100px;
+  min-height: 100vh;
+  height: 100%;
+  padding: 100px 0 100px;
 }

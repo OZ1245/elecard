@@ -14,8 +14,8 @@ const paths = {
   src: './src/',
   build: 'build/',
   concatJS: [
+    './src/assets/js/plugins/*.js',
     './src/assets/js/script.js',
-    './src/assets/js/plugins/*.js'
   ]
 };
 
