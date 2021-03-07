@@ -14,12 +14,17 @@ class dataList {
     let $this = this;
 
     $this.$target.addClass($this.className);
+    $this.pager;
 
     $.getJSON($this.url + $this.targetFile, '', function (data) {
       $this.data = data;
       $this.pager = new Pagination({items: $this.data});
       $this.pager.init();
       $this.renderPage();
+      $this.$target.after($this.pager.$element);
+      $this.pager.$element[0].addEventListener('pagination.update', function(e){
+        $this.renderPage();
+      });
     });
 
   }
@@ -27,7 +32,7 @@ class dataList {
   renderPage() {
     let $this = this,
         $items = [],
-        end = ($this.pager.current * $this.pager.perPage) - 1,
+        end = ($this.pager.current * $this.pager.perPage),
         start = (($this.pager.current * $this.pager.perPage) - $this.pager.perPage);
 
     for (let i = start; i < end; i++) {
@@ -50,7 +55,6 @@ class dataList {
     }
 
     $this.$target.html($items);
-    $this.$target.after($this.pager.$element);
   }
 
   closeCard(id) {
@@ -61,7 +65,7 @@ class dataList {
 
   update() {
     // TODO @ Обновлять список соответсвенно с пагинацией.
-    // То есть для пагинации добавить Event, что страница была переключена. 
+    // То есть для пагинации добавить Event, что страница была переключена.
   }
 }
 
@@ -72,7 +76,8 @@ class Pagination {
     this.items      = options.items;
     this.perPage = typeof options.numItems != 'undefined' ? options.numItems : 12;
     this.className  = typeof options.className != 'undefined' ? options.className : 'pagination';
-    this.numPages   = parseInt(this.items.length / this.perPage);
+    this.total      = this.items.length;
+    this.numPages   = parseInt(this.total / this.perPage);
     this.current    = 1;
   }
 
@@ -113,20 +118,54 @@ class Pagination {
 
     $this._updateProp();
 
-    $this.$current = $(`<span type="button" class="${$this.className}__current">${$this.current}</span>`);
+    $this.$selector = $(`<div class="${$this.className}__wrap-selector">Перейти на <select class="${$this.className}__selector"></select></div>`);
+    $this.$selector = $('<select/>', {
+      class: `${$this.className}__selector`,
+      html: function() {
+        let $options = [];
+        for (let i = 1; i <= $this.numPages; i++) {
+          $options.push(`<option value=${i}>${i}</option>`);
+        }
+        return $options;
+      }
+    }).on('change', function(){
+      $this.update($(this).val());
+    });
+
+    $this.$current = $(`<label type="button" class="${$this.className}__current">${$this.current}</label>`);
 
     $this.$element = $('<div/>', {
       class: this.className,
       html: [$this.$first, $this.$prev, $this.$current, $this.$next, $this.$last]
     });
+    $this.$element.append($('<div/>', {
+      class: `${$this.className}__wrap-selector`,
+      html: [
+        $('<label>Перейти на </label>'),
+        $this.$selector
+      ]
+    }))
   }
 
   update(targetPage) {
-    if (targetPage >= 1 || targetPage <= this.numPages) {
-      this.current = targetPage;
-      this.$current.text(this.current);
+    let $this = this;
 
-      this._updateProp();
+    if (targetPage >= 1 || targetPage <= this.numPages) {
+      $this.current = targetPage;
+      $this.$current.text($this.current);
+
+      $this._updateProp();
+      $this.$selector.val($this.current);
+
+      let updateEvent = new CustomEvent('pagination.update', {
+        bubbles: true,
+        detail: {
+          current: $this.current,
+          perPage: $this.perPage,
+          total:   $this.total
+        }
+      });
+      $this.$element[0].dispatchEvent(updateEvent);
     }
   }
 

@@ -14,12 +14,17 @@ class dataList {
     let $this = this;
 
     $this.$target.addClass($this.className);
+    $this.pager;
 
     $.getJSON($this.url + $this.targetFile, '', function (data) {
       $this.data = data;
       $this.pager = new Pagination({items: $this.data});
       $this.pager.init();
       $this.renderPage();
+      $this.$target.after($this.pager.$element);
+      $this.pager.$element[0].addEventListener('pagination.update', function(e){
+        $this.renderPage();
+      });
     });
 
   }
@@ -27,7 +32,7 @@ class dataList {
   renderPage() {
     let $this = this,
         $items = [],
-        end = ($this.pager.current * $this.pager.perPage) - 1,
+        end = ($this.pager.current * $this.pager.perPage),
         start = (($this.pager.current * $this.pager.perPage) - $this.pager.perPage);
 
     for (let i = start; i < end; i++) {
@@ -50,7 +55,6 @@ class dataList {
     }
 
     $this.$target.html($items);
-    $this.$target.after($this.pager.$element);
   }
 
   closeCard(id) {
@@ -61,6 +65,6 @@ class dataList {
 
   update() {
     // TODO @ Обновлять список соответсвенно с пагинацией.
-    // То есть для пагинации добавить Event, что страница была переключена. 
+    // То есть для пагинации добавить Event, что страница была переключена.
   }
 }
