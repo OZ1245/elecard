@@ -1,0 +1,52 @@
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 30px;
+
+  &__item {
+    width: 30%;
+    margin: 10px 20px;
+    padding: 0px;
+    position: relative;
+    z-index: 0;
+    background: @color-white;
+
+    &.closed {
+      display: none;
+    }
+  }
+  &__image {
+    width: 100%;
+    height: 350px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  &__description {
+    margin: 0;
+    padding: 15px;
+  }
+  &__button-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    .button-reset();
+    background: @color-white;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    color: @color-red;
+
+    &:hover, &:focus {
+      background: @color-red;
+      color: @color-white;
+    }
+  }
+}

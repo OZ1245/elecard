@@ -8,6 +8,7 @@ class dataList {
     this.targetFile= typeof options.file != 'undefined' ? options.file : 'catalog.json';
     this.fishText  = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce quis ipsum euismod, vulputate velit a, elementum velit.';
     this.data      = [];
+    this.cookieName= 'cardClosed';
   }
 
   init() {
@@ -24,6 +25,7 @@ class dataList {
       $this.$target.after($this.pager.$element);
       $this.pager.$element[0].addEventListener('pagination.update', function(e){
         $this.renderPage();
+        $('html').stop().animate({scrollTop: 0}, 500, 'swing');
       });
     });
 
@@ -37,11 +39,12 @@ class dataList {
 
     for (let i = start; i < end; i++) {
       let item = $this.data[i];
+
       $items.push($('<div>', {
-        class: $this.className + '__item',
+        class: `${$this.className}__item ${$this._checkCookie(i) ? 'closed' : ''}`,
         html: [
           $(`<div class="${$this.className}__image"><img src="${$this.url + item.image}" /></div>`),
-          $(`<p class="${$this.className}__description">${item.description ? $this.fishText : ''}</p>`),
+          $(`<p class="${$this.className}__description">${item.description ? item.description : $this.fishText}</p>`),
           $('<button/>', {
             type: 'button',
             class: `${$this.className}__button-close`,
@@ -58,13 +61,23 @@ class dataList {
   }
 
   closeCard(id) {
+    let dataString = $.cookie(this.cookieName);
+    let data = [];
+    if (typeof dataString != 'undefined') {
+      data = dataString.split(',');
+    }
+    data.push(id);
+
+    $.cookie(this.cookieName, data.join(','), {expires: 7});
+
     let $item = $(`.${this.className}__item[data-id="${id}"]`);
-    $item.addClass(`${this.className}_closed`);
-    // TODO @ Запись в localStorage
+    $item.addClass('closed');
   }
 
-  update() {
-    // TODO @ Обновлять список соответсвенно с пагинацией.
-    // То есть для пагинации добавить Event, что страница была переключена.
+  _checkCookie(q) {
+    let dataString = $.cookie(this.cookieName);
+    if (typeof dataString != 'undefined') {
+      return dataString.split(',').filter(id => id == q).length > 0;
+    } else return false;
   }
 }

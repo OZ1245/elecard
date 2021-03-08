@@ -15,7 +15,7 @@ class Pagination {
 
     $this.$first = $(`<button/>`, {
       type: 'button',
-      class: `${$this.className}__first`,
+      class: `${$this.className}__button first`,
       text: '|<'
     }).on('click', function(){
       $this.update(1);
@@ -23,23 +23,23 @@ class Pagination {
 
     $this.$prev = $('<button/>', {
       type: 'button',
-      class: `${$this.className}__pref`,
-      text: '<<'
+      class: `${$this.className}__button prev`,
+      text: '<'
     }).on('click', function(){
       $this.update($this.current-1);
     });
 
     $this.$next = $('<button/>', {
       type: 'button',
-      class: `${$this.className}__next`,
-      text: '>>'
+      class: `${$this.className}__button next`,
+      text: '>'
     }).on('click', function(){
       $this.update($this.current+1);
     });
 
     $this.$last = $('<button/>', {
       type: 'button',
-      class: `${$this.className}__last`,
+      class: `${$this.className}__button last`,
       text: '>|'
     }).on('click', function(){
       $this.update($this.numPages);
